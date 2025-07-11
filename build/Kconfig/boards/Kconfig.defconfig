@@ -1,0 +1,2 @@
+# Load Zephyr board defconfig descriptions.
+osource "/home/minhluu/zephyr_proj/zephyr/boards/nordic/nrf52dk/Kconfig.defconfig"

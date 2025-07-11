@@ -1,0 +1,61 @@
+cmake:
+  application:
+    configuration-dir: '/home/minhluu/zephyr_proj/app_ble_fsm'
+    source-dir: '/home/minhluu/zephyr_proj/app_ble_fsm'
+  board:
+    name: 'nrf52dk'
+    path:
+     - '/home/minhluu/zephyr_proj/zephyr/boards/nordic/nrf52dk'
+    qualifiers: 'nrf52832'
+    revision: ''
+  devicetree:
+    bindings-dirs:
+     - '/home/minhluu/zephyr_proj/zephyr/dts/bindings'
+    files:
+     - '/home/minhluu/zephyr_proj/zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts'
+    include-dirs:
+     - '/home/minhluu/zephyr_proj/modules/hal/ambiq/dts'
+     - '/home/minhluu/zephyr_proj/modules/hal/atmel/include'
+     - '/home/minhluu/zephyr_proj/modules/hal/bouffalolab/include'
+     - '/home/minhluu/zephyr_proj/modules/hal/bouffalolab/include/zephyr'
+     - '/home/minhluu/zephyr_proj/modules/hal/gigadevice/include'
+     - '/home/minhluu/zephyr_proj/modules/hal/microchip/include'
+     - '/home/minhluu/zephyr_proj/modules/hal/microchip/dts'
+     - '/home/minhluu/zephyr_proj/modules/hal/nuvoton/dts'
+     - '/home/minhluu/zephyr_proj/modules/hal/nxp/dts'
+     - '/home/minhluu/zephyr_proj/modules/hal/stm32/dts'
+     - '/home/minhluu/zephyr_proj/modules/hal/ti/dts'
+     - '/home/minhluu/zephyr_proj/zephyr/include'
+     - '/home/minhluu/zephyr_proj/zephyr/include/zephyr'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/common'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/vendor'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/rx'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/x86'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/xtensa'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/sparc'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/riscv'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/posix'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/arm64'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/arm'
+     - '/home/minhluu/zephyr_proj/zephyr/dts/arc'
+     - '/home/minhluu/zephyr_proj/zephyr/dts'
+  kconfig:
+    files:
+     - '/home/minhluu/zephyr_proj/zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832_defconfig'
+     - '/home/minhluu/zephyr_proj/app_ble_fsm/prj.conf'
+    user-files:
+     - '/home/minhluu/zephyr_proj/app_ble_fsm/prj.conf'
+  toolchain:
+    name: 'zephyr'
+    path: '/home/minhluu/zephyr-sdk-0.17.2'
+  vendor-specific:
+    nordic:
+      svdfile: '/home/minhluu/zephyr_proj/modules/hal/nordic/nrfx/mdk/nrf52.svd'
+  zephyr:
+    version: '4.2.0-rc2'
+    zephyr-base: '/home/minhluu/zephyr_proj/zephyr'
+version: '0.1.0'
+west:
+  command: '/home/minhluu/venv/bin/west build -b nrf52dk/nrf52832 -p'
+  topdir: '/home/minhluu/zephyr_proj'
+  version: '1.4.0'

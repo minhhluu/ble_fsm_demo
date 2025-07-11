@@ -1,0 +1,2 @@
+# Load Sysbuild board Kconfig descriptions.
+osource "/home/minhluu/zephyr_proj/zephyr/boards/nordic/nrf52dk/Kconfig.sysbuild"
