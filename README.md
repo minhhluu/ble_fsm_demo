@@ -13,7 +13,7 @@ Sau khi kết nối thành công:
 	
 # 🔄 BLE Finite State Machine (FSM) – Version 1
 
-This project demonstrates a **dynamic role-switching** behavior using the **nRF52833** of Noridc Semiconductor and the **Zephyr RTOS Bluetooth stack**. The device acts as a **Peripheral** initially and switches to **Central** mode based on a GATT command from a connected device (e.g., a smartphone).
+This project demonstrates a **dynamic role-switching** behavior using the **nRF52833** of Nordic Semiconductor and the **Zephyr RTOS Bluetooth stack**. The device acts as a **Peripheral** initially and switches to **Central** mode based on a GATT command from a connected device (e.g., a smartphone).
 
 ---
 
