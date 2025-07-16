@@ -39,111 +39,111 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/canbus/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/canbus/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/debug/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/debug/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/fb/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/fb/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/fs/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/fs/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/ipc/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/ipc/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/logging/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/logging/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/mem_mgmt/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/mem_mgmt/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/mgmt/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/mgmt/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/modbus/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/modbus/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/pm/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/pm/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/pmci/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/pmci/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/portability/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/portability/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/random/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/random/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/rtio/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/rtio/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/sd/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/sd/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/stats/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/stats/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/storage/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/storage/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/task_wdt/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/task_wdt/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/testsuite/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/testsuite/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/tracing/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/tracing/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/usb/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/usb/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/subsys/bluetooth/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/subsys/bluetooth/cmake_install.cmake")
 endif()
 

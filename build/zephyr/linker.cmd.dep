@@ -1,12 +1,12 @@
 linker.cmd: \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/arch/arm/cortex_m/scripts/linker.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/zephyr/autoconf.h \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/zephyr/autoconf.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/sections.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/section_tags.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/toolchain.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/toolchain/gcc.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/devicetree.h \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/zephyr/devicetree_generated.h \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/zephyr/devicetree_generated.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/irq_multilevel.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/sys/util.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/sys/util_macro.h \
@@ -35,14 +35,14 @@ linker.cmd: \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/devicetree_regions.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/linker-defs.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/toolchain/common.h \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/zephyr/offsets.h \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/zephyr/offsets.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/linker-tool.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/linker-tool-gcc.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/kernel/mm.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/kernel/internal/mm.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/linker-devnull.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/rel-sections.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-rom-start.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-rom-start.ld \
  /home/minhluu/zephyr_proj/zephyr/include/../arch/common/rom_start_address.ld \
  /home/minhluu/zephyr_proj/zephyr/include/../arch/common/fill_with_zeros.ld \
  /home/minhluu/zephyr_proj/zephyr/include/../arch/common/rom_start_offset.ld \
@@ -54,7 +54,7 @@ linker.cmd: \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-rom/common-rom-kernel-devices.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/iterable_sections.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/device-deps.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/device-api-sections.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/device-api-sections.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-rom/common-rom-ztest.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-rom/common-rom-init.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-rom/common-rom-net.ld \
@@ -63,25 +63,25 @@ linker.cmd: \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-rom/common-rom-debug.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-rom/common-rom-interrupt-controllers.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-rom/common-rom-misc.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-rom-sections.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-rom-sections.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/thread-local-storage.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-rodata.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-rodata.ld \
  /home/minhluu/zephyr_proj/zephyr/include/../arch/arm/core/swi_tables.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/kobject-rom.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/cplusplus-rom.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-ram-sections.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-ram-sections.ld \
  /home/minhluu/zephyr_proj/zephyr/include/../arch/common/ramfunc.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-ramfunc-section.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-rwdata.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-ramfunc-section.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-rwdata.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-ram.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/kobject-data.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/cplusplus-ram.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-data-sections.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-sections.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-data-sections.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-sections.ld \
  /home/minhluu/zephyr_proj/zephyr/include/../soc/nordic/common/platform_init.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/intlist.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/debug-sections.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/common-noinit.ld \
- /home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/include/generated/snippets-noinit.ld \
+ /home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/include/generated/snippets-noinit.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/kobject-priv-stacks.ld \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/linker/ram-end.ld

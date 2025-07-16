@@ -11,14 +11,15 @@
 #include <zephyr/bluetooth/gatt.h>
 #include <zephyr/bluetooth/conn.h>
 #include <zephyr/sys/printk.h>
-#include <zephyr/bluetooth/gatt.h>
 #include <zephyr/bluetooth/uuid.h>
+#include "led_strip.h"
 
 #define LED1_NODE DT_ALIAS(led0)
 #define LED2_NODE DT_ALIAS(led1)
 
 static const struct gpio_dt_spec led1 = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
 static const struct gpio_dt_spec led2 = GPIO_DT_SPEC_GET(LED2_NODE, gpios);
+extern led_cmd_t led_cmd_data;  // the struct filled in write_cb
 
 /* FSM States */
 typedef enum {
@@ -26,6 +27,7 @@ typedef enum {
 	STATE_PERIPHERAL,
 	STATE_CONNECTED,
 	STATE_SWITCH_TO_CENTRAL,
+	STATE_LED_CTRL,
 	STATE_CENTRAL_SCANNING,
 	STATE_CENTRAL_CONNECTED
 } ble_state_t;
@@ -34,39 +36,58 @@ static ble_state_t current_state = STATE_IDLE;
 static struct bt_conn *current_conn = NULL;
 
 /* Custom GATT Service */
-#define BT_UUID_CUSTOM_SERVICE_VAL  BT_UUID_128_ENCODE(0x12345678, 0x1234, 0x5678, 0x1234, 0x56789abcdef0)
-#define BT_UUID_CUSTOM_CHAR_VAL     BT_UUID_128_ENCODE(0x12345678, 0x1234, 0x5678, 0x1234, 0x56789abcdef1)
+#define BT_UUID_CONTROL_SERVICE_VAL  BT_UUID_128_ENCODE(0x534C4220, 0x4441, 0x4E54, 0x494E, 0x4F0000001000)
+#define BT_UUID_LED_CONTROL_CHAR_VAL     BT_UUID_128_ENCODE(0x534C4220, 0x4441, 0x4E54, 0x494E, 0x4F0000001001)
 
-static struct bt_uuid_128 custom_service_uuid = BT_UUID_INIT_128(BT_UUID_CUSTOM_SERVICE_VAL);
-static struct bt_uuid_128 custom_char_uuid = BT_UUID_INIT_128(BT_UUID_CUSTOM_CHAR_VAL);
+static struct bt_uuid_128 control_service_uuid = BT_UUID_INIT_128(BT_UUID_CONTROL_SERVICE_VAL);
+static struct bt_uuid_128 led_char_uuid = BT_UUID_INIT_128(BT_UUID_LED_CONTROL_CHAR_VAL);
+
+/* Callback on read from phone*/
+static ssize_t read_cb(struct bt_conn *conn,
+		       const struct bt_gatt_attr *attr,
+		       void *buf, uint16_t len,
+		       uint16_t offset)
+{
+	const char *value = "LED On"; // read result: 4C 45 44 20 4F 6E
+	return bt_gatt_attr_read(conn, attr, buf, len, offset, value, strlen(value));
+}
 
 /* Callback on write from phone */
 ssize_t write_cb(struct bt_conn *conn, const struct bt_gatt_attr *attr,
-		const void *buf, uint16_t len, uint16_t offset, uint8_t flags)
+                 const void *buf, uint16_t len, uint16_t offset, uint8_t flags)
 {
-	char cmd[20] = {0};
-	snprintf(cmd, sizeof(cmd), "%.*s", len, (char *)buf);
-	printk("Received command: %s\n", cmd);
+    printk("Received command:");
+    for (int i = 0; i < len; i++) {
+        printk(" %02X", ((const uint8_t *)buf)[i]);
+    }
+    printk("\n");
 
-	if (strcmp(cmd, "SCAN") == 0) {
-		current_state = STATE_SWITCH_TO_CENTRAL;
-		bt_conn_disconnect(conn, BT_HCI_ERR_REMOTE_USER_TERM_CONN);
-	}
-	return len;
+    if (len >= 6 && ((const uint8_t *)buf)[0] == 0x00) {
+        current_state = STATE_LED_CTRL;
+        // optionally parse buf into led_cmd_t
+    } else if (len >= 4 && memcmp(buf, "SCAN", 4) == 0) {
+        current_state = STATE_SWITCH_TO_CENTRAL;
+        bt_conn_disconnect(conn, BT_HCI_ERR_REMOTE_USER_TERM_CONN);
+    }
+
+    return len;
 }
 /*
 custom_svc: is the service UUID
-custom_service_uuid: UUID of the characteristic
+control_service_uuid: UUID of the characteristic
 BT_GATT_CHRC_WRITE: allows writing
 BT_GATT_PERM_WRITE: permission for writing
 write_cb: function to handle the write
+read_cb : function to handle the read
 */
+
 BT_GATT_SERVICE_DEFINE(custom_svc,
-	BT_GATT_PRIMARY_SERVICE(&custom_service_uuid),
-	BT_GATT_CHARACTERISTIC(&custom_char_uuid.uuid,
-				BT_GATT_CHRC_WRITE,
-				BT_GATT_PERM_WRITE,
-				NULL, write_cb, NULL),
+	BT_GATT_PRIMARY_SERVICE(&control_service_uuid),
+
+	BT_GATT_CHARACTERISTIC(&led_char_uuid.uuid,
+	BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
+	BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
+	read_cb, write_cb, NULL),
 );
 
 /* Peripheral Callbacks */
@@ -141,11 +162,9 @@ void start_scan(void)
 }
 
 void main(void)
-{
+{    
 	gpio_pin_configure_dt(&led1, GPIO_OUTPUT_INACTIVE);
 	gpio_pin_configure_dt(&led2, GPIO_OUTPUT_INACTIVE);
-
-	printk("BLE FSM example start\n");
 
 	if (bt_enable(NULL) == 0) {
 		printk("Bluetooth enabled\n");
@@ -156,6 +175,10 @@ void main(void)
 	}
 
 	while (1) {
+		
+		// checking status
+	    // led_strip_animate();      
+	        
 		switch (current_state) {
 		case STATE_PERIPHERAL:
 			printk("Acting as Peripheral...\n");
@@ -168,6 +191,16 @@ void main(void)
 			start_scan();
 			current_state = STATE_IDLE;
 			break;
+		case STATE_LED_CTRL:
+			led_strip_init();
+    		printk("LED is initialized successfully\n");
+			led_strip_control(&led_cmd_data);
+			//printk("LED Control Service on \n");
+			led_strip_animate();
+			k_sleep(K_MSEC(50));
+			current_state = STATE_IDLE;
+			break;
+			
 		default:
 			k_sleep(K_MSEC(500));
 		}

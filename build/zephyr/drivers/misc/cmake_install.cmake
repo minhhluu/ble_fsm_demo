@@ -39,11 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/misc/coresight/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/misc/coresight/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/misc/interconn/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/misc/interconn/cmake_install.cmake")
 endif()
 

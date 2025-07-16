@@ -1,0 +1,13 @@
+build/
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.log
+*.d
+*.pyc
+__pycache__/
+venv/
+.idea/
+.vscode/

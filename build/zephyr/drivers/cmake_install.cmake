@@ -39,76 +39,86 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/disk/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/disk/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/firmware/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/firmware/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/interrupt_controller/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/interrupt_controller/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/misc/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/misc/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/pcie/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/pcie/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/usb/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/usb/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/usb_c/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/usb_c/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/bluetooth/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/bluetooth/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/clock_control/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/clock_control/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/console/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/console/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/entropy/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/entropy/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/gpio/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/gpio/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/pinctrl/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/led_strip/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/serial/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/pinctrl/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/drivers/timer/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/serial/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/spi/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/drivers/timer/cmake_install.cmake")
 endif()
 

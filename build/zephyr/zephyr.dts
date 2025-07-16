@@ -37,6 +37,7 @@
 		mcuboot-button0 = &button0; /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:140 */
 		mcuboot-led0 = &led0;       /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:141 */
 		watchdog0 = &wdt0;          /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:142 */
+		led-strip = &led_strip;     /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:33 */
 	};
 
 	/* node '/soc' defined in zephyr/dts/arm/armv7-m.dtsi:6 */
@@ -560,13 +561,25 @@
 			interrupts = < 0x23 0x1 >;               /* in zephyr/dts/arm/nordic/nrf52832.dtsi:463 */
 			max-frequency = < 0x7a1200 >;            /* in zephyr/dts/arm/nordic/nrf52832.dtsi:464 */
 			easydma-maxcnt-bits = < 0x8 >;           /* in zephyr/dts/arm/nordic/nrf52832.dtsi:465 */
-			compatible = "nordic,nrf-spi";           /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:221 */
 			status = "okay";                         /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:222 */
 			cs-gpios = < &arduino_header 0x10 0x1 >; /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:223 */
 			pinctrl-0 = < &spi2_default >;           /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:224 */
 			pinctrl-1 = < &spi2_sleep >;             /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:225 */
 			pinctrl-names = "default",
 			                "sleep";                 /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:226 */
+			compatible = "nordic,nrf-spim";          /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:12 */
+
+			/* node '/soc/spi@40023000/ws2812@0' defined in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:13 */
+			led_strip: ws2812@0 {
+				compatible = "worldsemi,ws2812-spi"; /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:14 */
+				label = "WS2812";                    /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:15 */
+				reg = < 0x0 >;                       /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:18 */
+				spi-max-frequency = < 0x3d0900 >;    /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:19 */
+				chain-length = < 0x10 >;             /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:22 */
+				color-mapping = < 0x2 0x1 0x3 >;     /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:23 */
+				spi-one-frame = < 0x70 >;            /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:26 */
+				spi-zero-frame = < 0x40 >;           /* in ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:27 */
+			};
 		};
 
 		/* node '/soc/rtc@40024000' defined in zephyr/dts/arm/nordic/nrf52832.dtsi:469 */

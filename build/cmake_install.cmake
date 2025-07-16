@@ -1,4 +1,4 @@
-# Install script for directory: /home/minhluu/zephyr_proj/app_ble_fsm
+# Install script for directory: /home/minhluu/zephyr_proj/ble_fsm_demo
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/app_ble_fsm/build/zephyr/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/minhluu/zephyr_proj/app_ble_fsm/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/minhluu/zephyr_proj/ble_fsm_demo/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
