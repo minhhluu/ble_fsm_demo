@@ -39,11 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/arch/arch/arm/core/cortex_m/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/projects/ble_fsm_demo/build/zephyr/arch/arch/arm/core/cortex_m/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/arch/arch/arm/core/mpu/cmake_install.cmake")
+  include("/home/minhluu/zephyr_proj/projects/ble_fsm_demo/build/zephyr/arch/arch/arm/core/mpu/cmake_install.cmake")
 endif()
 

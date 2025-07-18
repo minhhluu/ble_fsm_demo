@@ -4,4 +4,4 @@ project(ble_fsm_demo)
 target_sources(app PRIVATE
   			src/main.c
   			led_strip_src/led_strip.c)
-target_include_directories(app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/led_strip_src)
+target_include_directories(app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

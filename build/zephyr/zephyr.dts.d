@@ -27,6 +27,6 @@ empty_file.o: /home/minhluu/zephyr_proj/zephyr/misc/empty_file.c \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/dt-bindings/adc/nrf-saadc.h \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/dt-bindings/regulator/nrf5x.h \
  /home/minhluu/zephyr_proj/zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832-pinctrl.dtsi \
- /home/minhluu/zephyr_proj/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay \
+ /home/minhluu/zephyr_proj/projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay \
  /home/minhluu/zephyr_proj/zephyr/include/zephyr/dt-bindings/led/led.h \
- /home/minhluu/zephyr_proj/ble_fsm_demo/boards/../nrf52-bindings.h
+ /home/minhluu/zephyr_proj/projects/ble_fsm_demo/boards/../nrf52-bindings.h

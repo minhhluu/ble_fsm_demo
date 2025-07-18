@@ -12,7 +12,7 @@
 #include <zephyr/bluetooth/conn.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/bluetooth/uuid.h>
-#include "led_strip.h"
+#include "led_strip_src/led_strip.h"
 
 #define LED1_NODE DT_ALIAS(led0)
 #define LED2_NODE DT_ALIAS(led1)
@@ -62,13 +62,19 @@ ssize_t write_cb(struct bt_conn *conn, const struct bt_gatt_attr *attr,
     }
     printk("\n");
 
-    if (len >= 6 && ((const uint8_t *)buf)[0] == 0x00) {
-        current_state = STATE_LED_CTRL;
-        // optionally parse buf into led_cmd_t
+    if (len == sizeof(led_cmd_t)) {
+		const led_cmd_t *cmd = (const led_cmd_t *)buf;
+		led_strip_control(cmd);
+		current_state = STATE_LED_CTRL;
     } else if (len >= 4 && memcmp(buf, "SCAN", 4) == 0) {
         current_state = STATE_SWITCH_TO_CENTRAL;
         bt_conn_disconnect(conn, BT_HCI_ERR_REMOTE_USER_TERM_CONN);
     }
+
+	// debug
+	printk("len = %d\n", len);
+	printk("sizeof(led_cmd_t) = %d\n", sizeof(led_cmd_t));
+	printk("First byte: 0x%02X\n", ((const uint8_t *)buf)[0]);
 
     return len;
 }
@@ -96,8 +102,8 @@ static void connected(struct bt_conn *conn, uint8_t err)
 	if (!err) {
 		current_conn = conn;
 		current_state = STATE_CONNECTED;
-		printk("Phone connected\n");
-		gpio_pin_set_dt(&led1, 1);
+		printk("Phone is connected\n");
+		gpio_pin_set_dt(&led1, 1);	
 	}
 }
 
@@ -175,34 +181,31 @@ void main(void)
 	}
 
 	while (1) {
-		
-		// checking status
-	    // led_strip_animate();      
-	        
 		switch (current_state) {
-		case STATE_PERIPHERAL:
-			printk("Acting as Peripheral...\n");
-			bt_le_adv_start(BT_LE_ADV_CONN_NAME, NULL, 0, NULL, 0);
-			current_state = STATE_IDLE;
-			break;
-		case STATE_CENTRAL_SCANNING:
-			printk("Switching to Central mode...\n");
-			bt_enable(NULL);
-			start_scan();
-			current_state = STATE_IDLE;
-			break;
-		case STATE_LED_CTRL:
-			led_strip_init();
-    		printk("LED is initialized successfully\n");
-			led_strip_control(&led_cmd_data);
-			//printk("LED Control Service on \n");
-			led_strip_animate();
-			k_sleep(K_MSEC(50));
-			current_state = STATE_IDLE;
-			break;
-			
-		default:
-			k_sleep(K_MSEC(500));
+			case STATE_PERIPHERAL:
+				printk("Acting as Peripheral...\n");
+				bt_le_adv_start(BT_LE_ADV_CONN_NAME, NULL, 0, NULL, 0);
+				current_state = STATE_IDLE;
+				break;
+
+			case STATE_CENTRAL_SCANNING:
+				printk("Switching to Central mode...\n");
+				bt_enable(NULL);
+				start_scan();
+				current_state = STATE_IDLE;
+				break;
+
+			case STATE_LED_CTRL:
+				led_strip_init();
+				led_strip_default();
+				printk("LED is initialized successfully\n");
+
+				while (current_state == STATE_LED_CTRL) {
+					led_strip_control(&led_cmd_data);
+					k_sleep(K_MSEC(100));
+				}
+				printk("Exiting LED control mode...\n");
+				break;
 		}
-	}
+	}	
 }

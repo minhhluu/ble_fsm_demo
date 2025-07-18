@@ -52,7 +52,7 @@ int led_strip_init(void)
 	return 0;
 }
 
-void led_strip_animate(void)
+void led_strip_default(void)
 {
 	static size_t color = 0;
 	int rc;
@@ -72,55 +72,61 @@ void led_strip_animate(void)
 	color = (color + 1) % ARRAY_SIZE(colors);
 }
 
-// control
+// [mode][R][G][B][brightness][duration] = 6 bytes
+
+static struct led_rgb scale_rgb(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
+{
+	struct led_rgb color;
+	color.r = (r * brightness) / 100;
+	color.g = (g * brightness) / 100;
+	color.b = (b * brightness) / 100;
+	
+	return color;
+}
+
 void led_strip_control(const led_cmd_t *cmd)
 {
 	int rc;
 
+	LOG_HEXDUMP_INF(cmd, sizeof(*cmd), "Command Struct:");
 	LOG_INF("Control mode: %d RGB: %02X %02X %02X Brightness: %d Duration: %d",
 		cmd->mode, cmd->r, cmd->g, cmd->b, cmd->brightness, cmd->duration);
 
-	// Convert brightness (0–100%) to 0–255 scale
-	uint8_t r = (cmd->r * cmd->brightness) / 100;
-	uint8_t g = (cmd->g * cmd->brightness) / 100;
-	uint8_t b = (cmd->b * cmd->brightness) / 100;
+	struct led_rgb color;
 
 	switch (cmd->mode) {
-	case 0: {
-		// Mode 0: Static RGB color
-		LOG_INF("test case 0 ok");
-		struct led_rgb pixel = { .r = r, .g = g, .b = b };
-
-		for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
-			pixels[i] = pixel;
-		}
-
-		rc = led_strip_update_rgb(strip, pixels, STRIP_NUM_PIXELS);
-		if (rc) {
-			LOG_ERR("LED update failed: %d", rc);
-		}
+	case 0:
+		LOG_INF("Mode 0: Direct RGB control (always on)");
+		color = scale_rgb(cmd->r, cmd->g, cmd->b, cmd->brightness);
 		break;
-	}
 
 	case 1:
-		// Mode 1: “Relax” mode – soft amber/yellow warm tone fade or pulse
-		// You can simulate fade in/out or alternate brightness
-		LOG_INF("test case 1 ok");
-		LOG_INF("Relax mode not yet implemented");
+		LOG_INF("Mode 1: Relax mode (warm amber)");
+		color = scale_rgb(255, 160, 64, cmd->brightness);
 		break;
 
 	case 2:
-		// Mode 2: “Pre-sleep” soft color transitions
-		LOG_INF("Pre-sleep mode not yet implemented");
-		break;
-
-	case 3:
-		// Mode 3: “Wake-up” – simulate sunrise with bright white/yellow
-		LOG_INF("Wake-up mode not yet implemented");
+		LOG_INF("Mode 2: Blue light night mode");
+		color = scale_rgb(0, 0, 255, cmd->brightness);
 		break;
 
 	default:
-		LOG_WRN("Unknown mode: %d", cmd->mode);
-		break;
+		LOG_WRN("Unsupported mode: %d", cmd->mode);
+		return -1;
 	}
+
+	// Apply color to all pixels
+	for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
+		pixels[i] = color;
+	}
+
+	// Update LED strip
+	rc = led_strip_update_rgb(strip, pixels, STRIP_NUM_PIXELS);
+	if (rc) {
+		LOG_ERR("LED update failed: %d", rc);
+		return rc;
+	}
+
+	return 0;
 }
+

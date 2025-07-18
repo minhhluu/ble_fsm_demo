@@ -7,7 +7,7 @@
       "operation": {
         "chip_erase_mode": "ERASE_RANGES_TOUCHED_BY_FIRMWARE",
         "firmware": {
-          "file": "/home/minhluu/zephyr_proj/ble_fsm_demo/build/zephyr/zephyr.hex"
+          "file": "/home/minhluu/zephyr_proj/projects/ble_fsm_demo/build/zephyr/zephyr.hex"
         },
         "type": "program",
         "verify": "VERIFY_READ"

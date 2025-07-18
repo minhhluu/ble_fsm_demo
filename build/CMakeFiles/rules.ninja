@@ -661,7 +661,7 @@ rule C_STATIC_LIBRARY_LINKER__kernel_
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/bin/cmake --regenerate-during-build -S/home/minhluu/zephyr_proj/ble_fsm_demo -B/home/minhluu/zephyr_proj/ble_fsm_demo/build
+  command = /usr/bin/cmake --regenerate-during-build -S/home/minhluu/zephyr_proj/projects/ble_fsm_demo -B/home/minhluu/zephyr_proj/projects/ble_fsm_demo/build
   description = Re-running CMake...
   generator = 1
 

@@ -1,7 +1,7 @@
 cmake:
   application:
-    configuration-dir: '/home/minhluu/zephyr_proj/ble_fsm_demo'
-    source-dir: '/home/minhluu/zephyr_proj/ble_fsm_demo'
+    configuration-dir: '/home/minhluu/zephyr_proj/projects/ble_fsm_demo'
+    source-dir: '/home/minhluu/zephyr_proj/projects/ble_fsm_demo'
   board:
     name: 'nrf52dk'
     path:
@@ -13,7 +13,7 @@ cmake:
      - '/home/minhluu/zephyr_proj/zephyr/dts/bindings'
     files:
      - '/home/minhluu/zephyr_proj/zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts'
-     - '/home/minhluu/zephyr_proj/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay'
+     - '/home/minhluu/zephyr_proj/projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay'
     include-dirs:
      - '/home/minhluu/zephyr_proj/modules/hal/ambiq/dts'
      - '/home/minhluu/zephyr_proj/modules/hal/atmel/include'
@@ -41,15 +41,15 @@ cmake:
      - '/home/minhluu/zephyr_proj/zephyr/dts/arc'
      - '/home/minhluu/zephyr_proj/zephyr/dts'
     user-files:
-     - '/home/minhluu/zephyr_proj/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay'
+     - '/home/minhluu/zephyr_proj/projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay'
   kconfig:
     files:
      - '/home/minhluu/zephyr_proj/zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832_defconfig'
-     - '/home/minhluu/zephyr_proj/ble_fsm_demo/prj.conf'
-     - '/home/minhluu/zephyr_proj/ble_fsm_demo/boards/nrf52dk_nrf52832.conf'
+     - '/home/minhluu/zephyr_proj/projects/ble_fsm_demo/prj.conf'
+     - '/home/minhluu/zephyr_proj/projects/ble_fsm_demo/boards/nrf52dk_nrf52832.conf'
     user-files:
-     - '/home/minhluu/zephyr_proj/ble_fsm_demo/prj.conf'
-     - '/home/minhluu/zephyr_proj/ble_fsm_demo/boards/nrf52dk_nrf52832.conf'
+     - '/home/minhluu/zephyr_proj/projects/ble_fsm_demo/prj.conf'
+     - '/home/minhluu/zephyr_proj/projects/ble_fsm_demo/boards/nrf52dk_nrf52832.conf'
   toolchain:
     name: 'zephyr'
     path: '/home/minhluu/zephyr-sdk-0.17.2'
