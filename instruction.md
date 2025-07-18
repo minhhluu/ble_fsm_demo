@@ -1,17 +1,24 @@
+## 🛠️ Tips
+
+- Always send **exactly 6 bytes**
+- All values must be in **hex** format
+- If using a BLE terminal (e.g. nRF Connect, Serial Bluetooth Terminal), ensure to send in **Hex mode**, not ASCII
+
 # LED Strip Control Examples (Hex Command Format)
 
 This guide explains how to control an LED strip using 6-byte hex commands sent from a phone or other BLE terminal.
 
 ## 🔧 Format (6 bytes)
+[mode][R][G][B][brightness][duration] = 6 bytes
 
 | Byte     | Description          | Note                                      |
 |----------|----------------------|-------------------------------------------|
-| Byte 0   | Mode                 | `00`: Manual RGB<br>`01`: Amber mode<br>`02`: Blue night mode |
+| Byte 0   | Mode                 | `00`: Manual RGB<br>`01`: Relax mode<br>`02`: Blue night mode |
 | Byte 1   | Red (R)              | Used only in mode `00`                    |
 | Byte 2   | Green (G)            | Used only in mode `00`                    |
 | Byte 3   | Blue (B)             | Used only in mode `00`                    |
 | Byte 4   | Brightness (0–255)   | All modes                                 |
-| Byte 5   | Duration (0–255)     | Reserved for future use                   |
+| Byte 5   | Duration (0–255)     | Developing...                             |
 
 > 💡 All values are in hexadecimal (00–FF)
 
@@ -38,14 +45,14 @@ LED uses exact RGB values with specified brightness.
 
 ---
 
-## 🟠 Mode 01 – Amber Mode
+## 🟠 Mode 01 – Relax Mode
 
 Amber tone with warm color. Ignores R/G/B input.
 
-### Example 4 – Amber, 100% brightness
+### Example 4 – Relax, 100% brightness
 01 00 00 00 64 00
 
-### Example 5 – Amber, 25% brightness
+### Example 5 – Relax, 25% brightness
 01 00 00 00 19 00
 
 ---
@@ -66,12 +73,4 @@ Cool blue tone with soft brightness. Ignores R/G/B input.
 
 - Currently unused
 - Can be set to `00`
-- Reserved for future effects like blinking, timed fades, etc.
-
----
-
-## 🛠️ Tips
-
-- Always send **exactly 6 bytes**
-- All values must be in **hex** format
-- If using a BLE terminal (e.g. nRF Connect, Serial Bluetooth Terminal), ensure to send in **Hex mode**, not ASCII
+- Reserved for future effects like blinking, timed fades, further functions, etc.
