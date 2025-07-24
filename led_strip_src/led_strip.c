@@ -88,7 +88,7 @@ void led_strip_control(const led_cmd_t *cmd)
 {
 	int rc;
 
-	LOG_HEXDUMP_INF(cmd, sizeof(*cmd), "Command Struct:");
+	// LOG_HEXDUMP_INF(cmd, sizeof(*cmd), "Command Struct:");
 	LOG_INF("Control mode: %d RGB: %02X %02X %02X Brightness: %d Duration: %d",
 		cmd->mode, cmd->r, cmd->g, cmd->b, cmd->brightness, cmd->duration);
 

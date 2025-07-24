@@ -13,13 +13,23 @@
 #include <zephyr/sys/printk.h>
 #include <zephyr/bluetooth/uuid.h>
 #include "led_strip_src/led_strip.h"
+#include "motor_src/motor.h"
+#include <zephyr/logging/log.h>
 
+#define LOG_LEVEL_INF   3
 #define LED1_NODE DT_ALIAS(led0)
 #define LED2_NODE DT_ALIAS(led1)
+
+LOG_MODULE_REGISTER(ble_fsm_demo, LOG_LEVEL_INF);
 
 static const struct gpio_dt_spec led1 = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
 static const struct gpio_dt_spec led2 = GPIO_DT_SPEC_GET(LED2_NODE, gpios);
 extern led_cmd_t led_cmd_data;  // the struct filled in write_cb
+
+// global variables
+int sensor_flag = 0; // flag to detect when motor is on
+static int sensor_led_mode = 0; // mode state flag
+static int last_vibration_count = 0;
 
 /* FSM States */
 typedef enum {
@@ -28,6 +38,7 @@ typedef enum {
 	STATE_CONNECTED,
 	STATE_SWITCH_TO_CENTRAL,
 	STATE_LED_CTRL,
+	STATE_MOTOR_CTRL,
 	STATE_CENTRAL_SCANNING,
 	STATE_CENTRAL_CONNECTED
 } ble_state_t;
@@ -38,9 +49,12 @@ static struct bt_conn *current_conn = NULL;
 /* Custom GATT Service */
 #define BT_UUID_CONTROL_SERVICE_VAL  BT_UUID_128_ENCODE(0x534C4220, 0x4441, 0x4E54, 0x494E, 0x4F0000001000)
 #define BT_UUID_LED_CONTROL_CHAR_VAL     BT_UUID_128_ENCODE(0x534C4220, 0x4441, 0x4E54, 0x494E, 0x4F0000001001)
+#define BT_UUID_MOTOR_CHAR_VAL     BT_UUID_128_ENCODE(0x534C4220, 0x4441, 0x4E54, 0x494E, 0x4F0000001002)
 
 static struct bt_uuid_128 control_service_uuid = BT_UUID_INIT_128(BT_UUID_CONTROL_SERVICE_VAL);
 static struct bt_uuid_128 led_char_uuid = BT_UUID_INIT_128(BT_UUID_LED_CONTROL_CHAR_VAL);
+static struct bt_uuid_128 motor_char_uuid = BT_UUID_INIT_128(BT_UUID_MOTOR_CHAR_VAL);
+
 
 /* Callback on read from phone*/
 static ssize_t read_cb(struct bt_conn *conn,
@@ -56,20 +70,42 @@ static ssize_t read_cb(struct bt_conn *conn,
 ssize_t write_cb(struct bt_conn *conn, const struct bt_gatt_attr *attr,
                  const void *buf, uint16_t len, uint16_t offset, uint8_t flags)
 {
-    printk("Received command:");
+	// data declare
+    const uint8_t *data = (const uint8_t *)buf;
+
+	// Convert to string for UTF-8 command detection
+    char str_buf[64] = {0};
+    uint16_t str_len = len < sizeof(str_buf) - 1 ? len : sizeof(str_buf) - 1;
+    memcpy(str_buf, data, str_len); 
+    str_buf[str_len] = '\0';
+	
+	printk("\nReceived command:");
     for (int i = 0; i < len; i++) {
         printk(" %02X", ((const uint8_t *)buf)[i]);
     }
     printk("\n");
 
-    if (len == sizeof(led_cmd_t)) {
-		const led_cmd_t *cmd = (const led_cmd_t *)buf;
-		led_strip_control(cmd);
-		current_state = STATE_LED_CTRL;
-    } else if (len >= 4 && memcmp(buf, "SCAN", 4) == 0) {
-        current_state = STATE_SWITCH_TO_CENTRAL;
-        bt_conn_disconnect(conn, BT_HCI_ERR_REMOTE_USER_TERM_CONN);
-    }
+	// compare UUID LED
+	if (bt_uuid_cmp(attr->uuid, &led_char_uuid.uuid) == 0) {
+		if (len == sizeof(led_cmd_t)) {
+			const led_cmd_t *cmd = (const led_cmd_t *)buf;
+			memcpy(&led_cmd_data, cmd, sizeof(led_cmd_t));  // Store data for later use
+			current_state = STATE_LED_CTRL;
+
+			
+    	} else if (len >= 4 && memcmp(buf, "SCAN", 4) == 0) {
+        	current_state = STATE_SWITCH_TO_CENTRAL;
+        	bt_conn_disconnect(conn, BT_HCI_ERR_REMOTE_USER_TERM_CONN);
+    	} 
+	
+	// compare UUID motor
+	} else if (bt_uuid_cmp(attr->uuid, &motor_char_uuid.uuid) == 0){
+    	current_state = STATE_MOTOR_CTRL;
+	}
+    
+
+	// print string
+	printk("String: '%s'\n", str_buf);
 
 	// debug
 	printk("len = %d\n", len);
@@ -87,10 +123,16 @@ write_cb: function to handle the write
 read_cb : function to handle the read
 */
 
+/* Custom GATT services */
 BT_GATT_SERVICE_DEFINE(custom_svc,
 	BT_GATT_PRIMARY_SERVICE(&control_service_uuid),
 
 	BT_GATT_CHARACTERISTIC(&led_char_uuid.uuid,
+	BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
+	BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
+	read_cb, write_cb, NULL),
+
+	BT_GATT_CHARACTERISTIC(&motor_char_uuid.uuid,
 	BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
 	BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
 	read_cb, write_cb, NULL),
@@ -144,7 +186,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
         i += len - 2;
     }
 
-	// TODO: match UUID/name then connect
+	// TODO: match UUID/name then connect (preserved)
 	gpio_pin_set_dt(&led2, 1);
 	current_state = STATE_CENTRAL_CONNECTED;
 	bt_le_scan_stop();
@@ -167,6 +209,12 @@ void start_scan(void)
     }
 }
 
+const char *motor_status(void)
+	{
+		motor_on();
+    	return "ON";
+	}
+
 void main(void)
 {    
 	gpio_pin_configure_dt(&led1, GPIO_OUTPUT_INACTIVE);
@@ -180,7 +228,37 @@ void main(void)
 		return;
 	}
 
-	while (1) {
+	// print motor state log
+	LOG_INF("Motor state: %s", motor_status());
+
+
+	// turn on sensor & detect flag
+	while (1) {	
+		if (motor_on() == 1){
+			sensor_flag = 1;
+		}
+	
+		if (vibration_count != last_vibration_count) {
+			last_vibration_count = vibration_count;
+
+			// Cycle to next mode
+		    sensor_led_mode = (sensor_led_mode + 1) % 3;
+			// sensor_led_mode++; // increase state every time tapping
+
+			if (sensor_led_mode > 2) {
+            	sensor_led_mode = 0;
+        	}
+
+			led_cmd_t sensor_cmd = {
+           		.mode = sensor_led_mode,
+           		.r = 0, .g = 0, .b = 0,
+           		.brightness = 128,
+           		.duration = 0
+       		};
+				led_strip_control(&sensor_cmd);
+		}
+		k_sleep(K_MSEC(10));
+
 		switch (current_state) {
 			case STATE_PERIPHERAL:
 				printk("Acting as Peripheral...\n");
@@ -195,16 +273,34 @@ void main(void)
 				current_state = STATE_IDLE;
 				break;
 
-			case STATE_LED_CTRL:
-				led_strip_init();
-				led_strip_default();
-				printk("LED is initialized successfully\n");
+			case STATE_LED_CTRL: {
+				printk("Entering LED control mode...\n");
 
-				while (current_state == STATE_LED_CTRL) {
-					led_strip_control(&led_cmd_data);
+				led_strip_init();
+				k_sleep(K_MSEC(100));
+
+				// LED Handle
+				led_strip_control(&led_cmd_data);
+
+				// Wait sensor_flag to change state
+				while (!sensor_flag) {
 					k_sleep(K_MSEC(100));
 				}
+
 				printk("Exiting LED control mode...\n");
+
+				// Change state when sensor_flag is TRUE
+				current_state = STATE_MOTOR_CTRL;
+
+				break;
+			}
+
+			case STATE_MOTOR_CTRL:
+				printk(">> Motor control state entered <<\n");
+				k_sleep(K_MSEC(100));
+				
+				// Motor control logic
+				current_state = STATE_IDLE;
 				break;
 		}
 	}	
