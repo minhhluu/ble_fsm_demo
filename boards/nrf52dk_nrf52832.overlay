@@ -5,6 +5,7 @@
  */
 
 #include <zephyr/dt-bindings/led/led.h>
+#include <zephyr/dt-bindings/gpio/gpio.h>
 
 #include "../nrf52-bindings.h"
 
@@ -32,4 +33,9 @@
 	aliases {
 		led-strip = &led_strip;
 	};
+	
+	zephyr,user {
+                signal-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>; // sensor SW1801P
+                
+    };
 };

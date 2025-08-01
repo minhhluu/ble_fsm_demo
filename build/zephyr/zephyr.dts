@@ -37,7 +37,7 @@
 		mcuboot-button0 = &button0; /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:140 */
 		mcuboot-led0 = &led0;       /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:141 */
 		watchdog0 = &wdt0;          /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:142 */
-		led-strip = &led_strip;     /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:33 */
+		led-strip = &led_strip;     /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:34 */
 	};
 
 	/* node '/soc' defined in zephyr/dts/arm/armv7-m.dtsi:6 */
@@ -567,18 +567,18 @@
 			pinctrl-1 = < &spi2_sleep >;             /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:225 */
 			pinctrl-names = "default",
 			                "sleep";                 /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:226 */
-			compatible = "nordic,nrf-spim";          /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:12 */
+			compatible = "nordic,nrf-spim";          /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:13 */
 
-			/* node '/soc/spi@40023000/ws2812@0' defined in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:13 */
+			/* node '/soc/spi@40023000/ws2812@0' defined in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:14 */
 			led_strip: ws2812@0 {
-				compatible = "worldsemi,ws2812-spi"; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:14 */
-				label = "WS2812";                    /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:15 */
-				reg = < 0x0 >;                       /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:18 */
-				spi-max-frequency = < 0x3d0900 >;    /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:19 */
-				chain-length = < 0x10 >;             /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:22 */
-				color-mapping = < 0x2 0x1 0x3 >;     /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:23 */
-				spi-one-frame = < 0x70 >;            /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:26 */
-				spi-zero-frame = < 0x40 >;           /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:27 */
+				compatible = "worldsemi,ws2812-spi"; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:15 */
+				label = "WS2812";                    /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:16 */
+				reg = < 0x0 >;                       /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:19 */
+				spi-max-frequency = < 0x3d0900 >;    /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:20 */
+				chain-length = < 0x10 >;             /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:23 */
+				color-mapping = < 0x2 0x1 0x3 >;     /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:24 */
+				spi-one-frame = < 0x70 >;            /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:27 */
+				spi-zero-frame = < 0x40 >;           /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:28 */
 			};
 		};
 
@@ -953,5 +953,10 @@
 		                 < 0x3 &adc 0x5 >,
 		                 < 0x4 &adc 0x6 >,
 		                 < 0x5 &adc 0x7 >; /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:120 */
+	};
+
+	/* node '/zephyr,user' defined in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:37 */
+	zephyr,user {
+		signal-gpios = < &gpio0 0xb 0x0 >; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:38 */
 	};
 };
