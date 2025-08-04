@@ -1065,12 +1065,32 @@ arduino_spi: &spi2 {
 / {
  aliases {
   led-strip = &led_strip;
+  brightness-incr = &btn_brightness_incr;
+  brightness-decr = &btn_brightness_decr;
  };
+
+
+ gpio_keys {
+         compatible = "gpio-keys";
+         btn_brightness_incr: button_0 {
+                        gpios = <&gpio0 13 ((1 << 4) | (1 << 0))>;
+                        label = "Brightness increase";
+                        zephyr,code = <11>;
+                };
+
+                btn_brightness_decr: button_1 {
+   gpios = <&gpio0 14 ((1 << 4) | (1 << 0))>;
+   label = "Brightness decrease";
+   zephyr,code = <2>;
+  };
+
+ };
+
 
  zephyr,user {
                 signal-gpios = <&gpio0 11 (0 << 0)>;
 
-    };
+        };
 };
 # 0 "<command-line>" 2
 # 1 "/home/minhluu/zephyr_proj/zephyr/misc/empty_file.c"

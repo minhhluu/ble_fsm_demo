@@ -24,20 +24,22 @@
 
 	/* node '/aliases' defined in zephyr/dts/common/skeleton.dtsi:13 */
 	aliases {
-		led0 = &led0;               /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:130 */
-		led1 = &led1;               /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:131 */
-		led2 = &led2;               /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:132 */
-		led3 = &led3;               /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:133 */
-		pwm-led0 = &pwm_led0;       /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:134 */
-		sw0 = &button0;             /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:135 */
-		sw1 = &button1;             /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:136 */
-		sw2 = &button2;             /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:137 */
-		sw3 = &button3;             /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:138 */
-		bootloader-led0 = &led0;    /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:139 */
-		mcuboot-button0 = &button0; /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:140 */
-		mcuboot-led0 = &led0;       /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:141 */
-		watchdog0 = &wdt0;          /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:142 */
-		led-strip = &led_strip;     /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:34 */
+		led0 = &led0;                           /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:130 */
+		led1 = &led1;                           /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:131 */
+		led2 = &led2;                           /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:132 */
+		led3 = &led3;                           /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:133 */
+		pwm-led0 = &pwm_led0;                   /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:134 */
+		sw0 = &button0;                         /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:135 */
+		sw1 = &button1;                         /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:136 */
+		sw2 = &button2;                         /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:137 */
+		sw3 = &button3;                         /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:138 */
+		bootloader-led0 = &led0;                /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:139 */
+		mcuboot-button0 = &button0;             /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:140 */
+		mcuboot-led0 = &led0;                   /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:141 */
+		watchdog0 = &wdt0;                      /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:142 */
+		led-strip = &led_strip;                 /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:34 */
+		brightness-incr = &btn_brightness_incr; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:35 */
+		brightness-decr = &btn_brightness_decr; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:36 */
 	};
 
 	/* node '/soc' defined in zephyr/dts/arm/armv7-m.dtsi:6 */
@@ -955,8 +957,27 @@
 		                 < 0x5 &adc 0x7 >; /* in zephyr/boards/nordic/nrf52dk/nrf52dk_nrf52832.dts:120 */
 	};
 
-	/* node '/zephyr,user' defined in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:37 */
+	/* node '/gpio_keys' defined in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:40 */
+	gpio_keys {
+		compatible = "gpio-keys"; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:41 */
+
+		/* node '/gpio_keys/button_0' defined in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:42 */
+		btn_brightness_incr: button_0 {
+			gpios = < &gpio0 0xd 0x11 >;   /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:43 */
+			label = "Brightness increase"; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:44 */
+			zephyr,code = < 0xb >;         /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:45 */
+		};
+
+		/* node '/gpio_keys/button_1' defined in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:48 */
+		btn_brightness_decr: button_1 {
+			gpios = < &gpio0 0xe 0x11 >;   /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:49 */
+			label = "Brightness decrease"; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:50 */
+			zephyr,code = < 0x2 >;         /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:51 */
+		};
+	};
+
+	/* node '/zephyr,user' defined in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:57 */
 	zephyr,user {
-		signal-gpios = < &gpio0 0xb 0x0 >; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:38 */
+		signal-gpios = < &gpio0 0xb 0x0 >; /* in projects/ble_fsm_demo/boards/nrf52dk_nrf52832.overlay:58 */
 	};
 };

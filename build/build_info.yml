@@ -61,6 +61,6 @@ cmake:
     zephyr-base: '/home/minhluu/zephyr_proj/zephyr'
 version: '0.1.0'
 west:
-  command: '/home/minhluu/venv/bin/west build -b nrf52dk/nrf52832 -p'
+  command: '/home/minhluu/venv/bin/west build -b nrf52dk/nrf52832'
   topdir: '/home/minhluu/zephyr_proj'
   version: '1.4.0'

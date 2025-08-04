@@ -26,6 +26,9 @@ void led_strip_default(void);
 /** Control LED strip once based on command data */
 void led_strip_control(const led_cmd_t *cmd);
 
+/* Global LED brightness */
+const led_cmd_t* get_last_led_cmd(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -31,12 +31,18 @@ LOG_MODULE_REGISTER(led_strip);
 
 led_cmd_t led_cmd_data;
 
+// Declare the static variable to store last command
+static led_cmd_t last_led_cmd;
+
+// global variables
+static int global_brightness = 100;
+
 static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);
 
 static const struct led_rgb colors[] = {
-	RGB(CONFIG_SAMPLE_LED_BRIGHTNESS, 0x00, 0x00), /* red */
-	RGB(0x00, CONFIG_SAMPLE_LED_BRIGHTNESS, 0x00), /* green */
-	RGB(0x00, 0x00, CONFIG_SAMPLE_LED_BRIGHTNESS), /* blue */
+	RGB(255, 0, 0),   /* red */
+    RGB(0, 255, 0),   /* green */  
+    RGB(0, 0, 255),   /* blue */
 };
 
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
@@ -77,20 +83,25 @@ void led_strip_default(void)
 static struct led_rgb scale_rgb(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
 	struct led_rgb color;
-	color.r = (r * brightness) / 100;
-	color.g = (g * brightness) / 100;
-	color.b = (b * brightness) / 100;
+	// Use global brightness instead of passed brightness
+	color.r = (r * global_brightness) / 100;
+	color.g = (g * global_brightness) / 100;
+	color.b = (b * global_brightness) / 100;
 	
 	return color;
 }
 
 void led_strip_control(const led_cmd_t *cmd)
-{
+{	
 	int rc;
+	// Cache the command so brightness-only updates can use it
+    last_led_cmd = *cmd;  // Save the entire command
 
 	// LOG_HEXDUMP_INF(cmd, sizeof(*cmd), "Command Struct:");
 	LOG_INF("Control mode: %d RGB: %02X %02X %02X Brightness: %d Duration: %d",
 		cmd->mode, cmd->r, cmd->g, cmd->b, cmd->brightness, cmd->duration);
+
+	global_brightness = cmd->brightness;  // Update global brightness (0-100 range)
 
 	struct led_rgb color;
 
@@ -130,3 +141,7 @@ void led_strip_control(const led_cmd_t *cmd)
 	return 0;
 }
 
+// Add a getter function to retrieve the last command
+const led_cmd_t* get_last_led_cmd(void) {
+    return &last_led_cmd;
+}

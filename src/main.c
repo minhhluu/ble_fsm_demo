@@ -15,42 +15,56 @@
 #include "led_strip_src/led_strip.h"
 #include "motor_src/motor.h"
 #include <zephyr/logging/log.h>
+#include <zephyr/input/input.h>
+#include "ble_uuids.h"
 
 #define LOG_LEVEL_INF   3
 #define LED1_NODE DT_ALIAS(led0)
 #define LED2_NODE DT_ALIAS(led1)
+#define BUTTON0_NODE DT_ALIAS(brightness_incr)
+#define BUTTON1_NODE DT_ALIAS(brightness_decr)
 
 LOG_MODULE_REGISTER(ble_fsm_demo, LOG_LEVEL_INF);
 
+extern led_cmd_t led_cmd_data;  // the struct filled in write_cb
+
+// led pins
 static const struct gpio_dt_spec led1 = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
 static const struct gpio_dt_spec led2 = GPIO_DT_SPEC_GET(LED2_NODE, gpios);
-extern led_cmd_t led_cmd_data;  // the struct filled in write_cb
+
+// button pins
+static const struct gpio_dt_spec brightness_incr = GPIO_DT_SPEC_GET(BUTTON0_NODE, gpios); // button 0: brightness up
+static const struct gpio_dt_spec brightness_decr = GPIO_DT_SPEC_GET(BUTTON1_NODE, gpios); // button 1: brightness down
 
 // global variables
 int sensor_flag = 0; // flag to detect when motor is on
 static int sensor_led_mode = 0; // mode state flag
 static int last_vibration_count = 0;
+
+// Global brightness control (0-255)
+static int global_brightness = 255; // Default brightness
+
+// flags for command received
 volatile bool ble_command_received = false;
 volatile bool motor_command_received = false;
+volatile bool motor_config_received = false;
 
 /* FSM States */
 typedef enum {
 	STATE_IDLE,
 	STATE_PERIPHERAL,
-	STATE_LED_CTRL
+	STATE_LED_CTRL,
+	STATE_MOTOR_CONFIG,
 } ble_state_t;
 
 static ble_state_t current_state = STATE_IDLE;
 static struct bt_conn *current_conn = NULL;
 
-/* Custom GATT Service */
-#define BT_UUID_CONTROL_SERVICE_VAL  BT_UUID_128_ENCODE(0x534C4220, 0x4441, 0x4E54, 0x494E, 0x4F0000001000)
-#define BT_UUID_LED_CONTROL_CHAR_VAL     BT_UUID_128_ENCODE(0x534C4220, 0x4441, 0x4E54, 0x494E, 0x4F0000001001)
-#define BT_UUID_MOTOR_CHAR_VAL     BT_UUID_128_ENCODE(0x534C4220, 0x4441, 0x4E54, 0x494E, 0x4F0000001002)
-
-static struct bt_uuid_128 control_service_uuid = BT_UUID_INIT_128(BT_UUID_CONTROL_SERVICE_VAL);
-static struct bt_uuid_128 led_char_uuid = BT_UUID_INIT_128(BT_UUID_LED_CONTROL_CHAR_VAL);
-static struct bt_uuid_128 motor_char_uuid = BT_UUID_INIT_128(BT_UUID_MOTOR_CHAR_VAL);
+// Characteristic names for UI/tools debug
+#define CONTROL_SERVICE_NAME     "SLB Control Service"
+#define LED_CTRL_NAME            "LED Control"
+#define MOTOR_CTRL_NAME          "Motor Control"
+#define MOTOR_CFG_NAME           "Motor Config"
 
 
 /* Callback on read from phone*/
@@ -85,23 +99,27 @@ ssize_t write_cb(struct bt_conn *conn, const struct bt_gatt_attr *attr,
 	// compare UUID LED
 	if (bt_uuid_cmp(attr->uuid, &led_char_uuid.uuid) == 0) {
 		if (len == sizeof(led_cmd_t)) {
+			ble_command_received = true;
 			const led_cmd_t *cmd = (const led_cmd_t *)buf;
 			memcpy(&led_cmd_data, cmd, sizeof(led_cmd_t));
+			printk(">> Switching to STATE_LED_CTRL (brightness: %d) <<\n", global_brightness);
 			current_state = STATE_LED_CTRL;
 		} 
 	} else if (bt_uuid_cmp(attr->uuid, &motor_char_uuid.uuid) == 0) {
-		printk("Motor characteristic written!\n");
 		motor_command_received = true;
+	} else if (bt_uuid_cmp(attr->uuid, &motor_config_char_uuid.uuid) == 0) {
+		printk(">> Switching to STATE_MOTOR_CONFIG <<\n");
+		motor_config_received = true;
+		current_state = STATE_MOTOR_CONFIG;
 	}
-    
 
 	// print string & debug
-	printk("String: '%s'\n", str_buf);
-	printk("len = %d\n", len);
-	printk("sizeof(led_cmd_t) = %d\n", sizeof(led_cmd_t));
-	printk("First byte: 0x%02X\n", ((const uint8_t *)buf)[0]);
+	// printk("String: '%s'\n", str_buf);
+	// printk("len = %d\n", len);
+	// printk("sizeof(led_cmd_t) = %d\n", sizeof(led_cmd_t));
+	// printk("First byte: 0x%02X\n", ((const uint8_t *)buf)[0]);
 
-    return len;
+    // return len;
 }
 /*
 custom_svc: is the service UUID
@@ -120,11 +138,19 @@ BT_GATT_SERVICE_DEFINE(custom_svc,
 	BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
 	BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
 	read_cb, write_cb, NULL),
+	BT_GATT_CUD(LED_CTRL_NAME, BT_GATT_PERM_READ),
 
 	BT_GATT_CHARACTERISTIC(&motor_char_uuid.uuid,
 	BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
 	BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
 	read_cb, write_cb, NULL),
+	BT_GATT_CUD(MOTOR_CTRL_NAME, BT_GATT_PERM_READ),
+
+	BT_GATT_CHARACTERISTIC(&motor_config_char_uuid.uuid,
+	BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
+	BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,
+	read_cb, write_cb, NULL),
+	BT_GATT_CUD(MOTOR_CFG_NAME, BT_GATT_PERM_READ),
 );
 
 /* Peripheral Callbacks */
@@ -204,10 +230,79 @@ const char *motor_status(void)
     	return "ON";
 	}
 
+// button brightness handle
+void button_handler(void){
+	static bool last_incr_state = false;
+	static bool last_decr_state = false;
+	static bool config_initialized = false;
+
+	// Initialize config state only once
+	if (!config_initialized) {
+		printk(">> STATE_MOTOR_CONFIG : ON <<\n");
+		printk("Global brightness control: 0-255 (10 units per press)\n");
+		printk("Current brightness: %d\n", global_brightness);
+		config_initialized = true;
+	}
+
+	// Check buttons once per loop iteration (non-blocking)
+	bool incr_pressed = gpio_pin_get_dt(&brightness_incr) == 0;
+	bool decr_pressed = gpio_pin_get_dt(&brightness_decr) == 0;
+
+	// Get the last command to preserve color settings
+	const led_cmd_t* last_cmd = get_last_led_cmd();
+
+	// Only print when button state changes from not pressed to pressed
+	if (incr_pressed && !last_incr_state) {
+		global_brightness += 10;
+		if (global_brightness > 100) {
+			global_brightness = 100;
+		}
+		printk(">> Global Brightness ++: %d\n", global_brightness);
+
+		led_cmd_t brightness_cmd = *last_cmd;  // Copy last command
+		brightness_cmd.brightness = global_brightness; // Sync it
+		led_strip_control(&brightness_cmd); // Use latest brightness
+
+	}
+
+	if (decr_pressed && !last_decr_state) {
+		global_brightness -= 10;
+		if (global_brightness < 0) {
+			global_brightness = 0;
+		}
+		printk(">> Global Brightness --: %d\n", global_brightness);
+
+		led_cmd_t brightness_cmd = *last_cmd;  // Copy last command
+		brightness_cmd.brightness = global_brightness; // Sync it
+		led_strip_control(&brightness_cmd); // Use latest brightness
+	}
+
+	// Update last states
+	last_incr_state = incr_pressed;
+	last_decr_state = decr_pressed;
+
+	// Small delay to prevent too rapid changes
+	if (incr_pressed || decr_pressed) {
+		k_msleep(50); // debounce
+	}
+
+	// safety check
+	if (last_cmd == NULL) {
+		printk("No previous command available\n");
+		return;
+	}
+}
+
 void main(void)
 {    
 	gpio_pin_configure_dt(&led1, GPIO_OUTPUT_INACTIVE);
 	gpio_pin_configure_dt(&led2, GPIO_OUTPUT_INACTIVE);
+
+	// button pins
+	gpio_pin_configure_dt(&brightness_incr, GPIO_INPUT);
+	gpio_pin_configure_dt(&brightness_decr, GPIO_INPUT);
+	gpio_pin_set_dt(&brightness_incr, 1);
+	gpio_pin_set_dt(&brightness_decr, 1);
 
 	// delay
 	k_sleep(K_MSEC(150));
@@ -247,7 +342,7 @@ void main(void)
 					led_cmd_t sensor_cmd = {
 						.mode = sensor_led_mode,
 						.r = 255, .g = 0, .b = 0, // Only used in mode 0
-						.brightness = 100,
+						.brightness = global_brightness, // Uses global brightness
 						.duration = 0
 					};
 					k_sleep(K_MSEC(100));
@@ -259,6 +354,19 @@ void main(void)
 				// Handle BLE LED command
 				led_strip_control(&led_cmd_data);
 				current_state = STATE_IDLE; // Always return to IDLE
+				break;
+			case STATE_MOTOR_CONFIG:				
+				// Check if motor config flag is enabled before executing
+				if (motor_config_received) {
+
+					button_handler();
+
+				} else {
+					// Exit motor config state when flag is cleared
+					printk("Motor configuration: done\n");
+					motor_config_received = false;
+					current_state = STATE_IDLE;
+				}
 				break;
 		}
 	}	
